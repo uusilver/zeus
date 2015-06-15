@@ -21,20 +21,23 @@ public class LoginFilter implements Filter {
 
 	}
 
-	public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse,
-			FilterChain chain) throws IOException, ServletException {
+	public void doFilter(ServletRequest servletRequest,
+			ServletResponse servletResponse, FilterChain chain)
+			throws IOException, ServletException {
 		// TODO Auto-generated method stub
 		HttpServletRequest request = (HttpServletRequest) servletRequest;
 		HttpServletResponse response = (HttpServletResponse) servletResponse;
 		String path = request.getRequestURI();
-		if (path.indexOf("/login") > -1) {
+		if (path.indexOf("/login") > -1 || path.endsWith(".css")
+				|| path.endsWith(".js") || path.endsWith(".woff")
+				|| path.endsWith(".png") || path.endsWith(".jpg")) {
 			chain.doFilter(servletRequest, servletResponse);
 			return;
 		}
 		User user = LoginController.getLoginUser(request);
-		if(user==null){
+		if (user == null) {
 			response.sendRedirect("login.html");
-		}else{
+		} else {
 			chain.doFilter(request, response);
 		}
 	}
