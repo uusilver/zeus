@@ -11,12 +11,6 @@
            http://www.springframework.org/schema/mvc
            http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd"
 	default-autowire="byName">
-	<mvc:interceptors>
-		<mvc:interceptor>
-			<mvc:mapping path="/*.html" />
-			<bean class="com.schenker.zeus.interceptor.InterceptorDemo"></bean>
-		</mvc:interceptor>
-	</mvc:interceptors>
 	<!-- Must have to let post running -->
 	<mvc:annotation-driven />
 
@@ -72,6 +66,13 @@
         <mvc:interceptor>  
            <mvc:mapping path="/*" /><!-- /* for all the pages -->  
            <bean class="com.schenker.zeus.interceptor.InterceptorDemo"></bean>  
+        </mvc:interceptor>  
+    </mvc:interceptors>  
+    
+    <mvc:interceptors>  
+        <mvc:interceptor>  
+           <mvc:mapping path="/displayData" /><!-- /* for display -->  
+           <bean class="com.schenker.zeus.interceptor.DoDisplayInterceptor"></bean>  
         </mvc:interceptor>  
     </mvc:interceptors>  
 

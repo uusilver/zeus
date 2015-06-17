@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.schenker.zeus.annotation.DisplayAfterValidation;
 import com.schenker.zeus.model.Person;
 
 /**
@@ -17,6 +18,7 @@ import com.schenker.zeus.model.Person;
 @Controller
 public class DisplayController {
 
+	@DisplayAfterValidation(required=true)
 	@RequestMapping(value = "/displayData", method = RequestMethod.GET)
 	public  @ResponseBody String queryData(){
 		return "success";
