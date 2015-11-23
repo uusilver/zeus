@@ -1,80 +1,87 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="utf-8">
-<link rel="shortcut icon" type="image/ico"
-	href="http://www.datatables.net/favicon.ico">
-<meta name="viewport" content="initial-scale=1.0, maximum-scale=2.0">
+    <meta charset="utf-8">
+    <link rel="shortcut icon" type="image/ico"
+          href="http://www.datatables.net/favicon.ico">
+    <meta name="viewport" content="initial-scale=1.0, maximum-scale=2.0">
 
-<title>DataTables example - Ajax data source (arrays)</title>
-<link rel="stylesheet" type="text/css"
-	href="css/jquery.dataTables.css">
-<link rel="stylesheet" type="text/css"
-	href="css/shCore.css">
-<link rel="stylesheet" type="text/css" href="css/demo.css">
-<style type="text/css" class="init">
-</style>
-<script type="text/javascript" language="javascript"
-	src="js/jquery.js"></script>
-<script type="text/javascript" language="javascript"
-	src="js/jquery.dataTables.js"></script>
-<script type="text/javascript" language="javascript"
-	src="js/shCore.js"></script>
-<script type="text/javascript" language="javascript"
-	src="js/demo.js"></script>
-<script type="text/javascript" language="javascript" class="init">
+    <title>DataTables example - Ajax data source (arrays)</title>
+    <link rel="stylesheet" type="text/css"
+          href="css/jquery.dataTables.css">
+    <link rel="stylesheet" type="text/css"
+          href="css/shCore.css">
+    <link rel="stylesheet" type="text/css" href="css/demo.css">
+    <style type="text/css" class="init">
+    </style>
+    <script type="text/javascript" language="javascript"
+            src="js/jquery.js"></script>
+    <script type="text/javascript" language="javascript"
+            src="js/jquery.dataTables.js"></script>
+    <script type="text/javascript" language="javascript"
+            src="js/shCore.js"></script>
+    <script type="text/javascript" language="javascript" class="init">
 
-$(document).ready(function() {
-	$('#example').dataTable( {
-		"ajax": "data/arrays.txt"
-	} );
+        $(document).ready(function () {
+            var table = $('#example').DataTable({  //DataTable 返回一个对象
+                "bProcessing": false, // 是否显示取数据时的那个等待提示
+                "bServerSide": true,//这个用来指明是通过服务端来取数据
+                "sAjaxSource": "/gridDataGenerator",//这个是请求的地址
+                "fnServerData": retrieveData, // 获取数据的处理函
+                columns: [
+                    {title: 'Name'},
+                    {title: 'Age'}
+                ]
+            });
+            //Bind filter to each column header
+            $('#example tbody th').each(function () {
+                var title = $(this).text();
+                $(this).append('<br/><input type="text" id="'+title+'S" placeholder="Search ' + title + '" />');
+            });
 
-	$.ajax({
-		  type: "POST",
-		  url: "testPost",
-		  data: JSON.stringify({ name: "Gerry", age: 20, city: "Sydney" }),
-		  contentType: 'application/json',
-		  success: function(data) {
-		   	alert("success");
-		  }
-		});
-} );
+            $("#search").click(function(){
 
-	</script>
+            })
+
+//                table.columns().every( function () {
+//                    $( 'input', this.footer() ).on( 'keyup change', function () {
+//                       alert( $(this).attr('id')+'---'+this.value);
+//                    } );
+//                } );
+                //after combine search condition
+
+
+        });
+        // 3个参数的名字可以随便命名,但必须是3个参数,少一个都不行
+        function retrieveData(aSource, aoData, callBack) {
+            $.ajax({
+                url: aSource,//这个就是请求地址对应sAjaxSource
+                data: {"aoData": JSON.stringify(aoData)},//这个是把datatable的一些基本数据传给后台,比如起始位置,每页显示的行数
+                type: 'post',
+                dataType: 'json',
+                async: false,
+                success: function (result) {
+                    callBack(result);//把返回的数据传给这个方法就可以了,datatable会自动绑定数据的
+                },
+                error: function (msg) {
+                }
+            });
+        }
+    </script>
 </head>
 
 <body class="dt-example">
-	<div class="container">
-		<section>
-			<h1>
-				DataTables example <span>Ajax data source (arrays)</span>
-			</h1>
+<div class="container">
+    <section>
+        <h1>
+           <button id="search">Search</button>
+        </h1>
+        <table id="example" class="display">
+        </table>
 
-			<table id="example" class="display" cellspacing="0" width="100%">
-				<thead>
-					<tr>
-						<th>Name</th>
-						<th>Position</th>
-						<th>Office</th>
-						<th>Extn.</th>
-						<th>Start date</th>
-						<th>Salary</th>
-					</tr>
-				</thead>
-				<tfoot>
-					<tr>
-						<th>Name</th>
-						<th>Position</th>
-						<th>Office</th>
-						<th>Extn.</th>
-						<th>Start date</th>
-						<th>Salary</th>
-					</tr>
-				</tfoot>
-			</table>
 
-		</section>
-	</div>
+    </section>
+</div>
 
 
 </body>

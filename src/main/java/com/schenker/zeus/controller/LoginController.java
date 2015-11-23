@@ -34,7 +34,7 @@ public class LoginController {
 			if (userValidation.userValidation(user.getUserId(),
 					user.getUserPassword())) {
 				req.getSession().setAttribute("userInSession", user);
-				return "index";
+				return "grid-demo";
 			}
 		}
 		return "login";
